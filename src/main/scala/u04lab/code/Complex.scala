@@ -6,7 +6,7 @@ trait Complex:
   def +(c: Complex): Complex // should implement the sum of two complex numbers..
   def *(c: Complex): Complex // should implement the product of two complex numbers
 
-case class ComplexImpl(override val re: Double, override val im: Double) extends Complex:
+class ComplexImpl(override val re: Double, override val im: Double) extends Complex:
 
   override def +(c: Complex): Complex = Complex(re + c.re, im + c.im)
   override def *(c: Complex): Complex = Complex(re * c.re - im * c.im, re * c.im + im * c.re)
@@ -20,7 +20,10 @@ object Complex:
   println((c, c.re, c.im)) // (ComplexImpl(18.0,21.0),18.0,21.0)
   val c2 = a(0) * a(1)
   println((c2, c2.re, c2.im)) // (ComplexImpl(-10.0,30.0),-10.0,30.0)
-  println(c)
+
+  val b = ComplexImpl(1,1)
+  val d = ComplexImpl(1,1)
+  println(b == d)
 
 /** Hints:
   *   - implement Complex with a ComplexImpl class, similar to PersonImpl in slides
