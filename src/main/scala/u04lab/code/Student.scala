@@ -13,6 +13,16 @@ trait Course:
   def name: String
   def teacher: String
 
+case class CourseImpl(override val name: String, override val teacher: String) extends Course
+
+class StudentImpl(override val name: String, override val year: Int) extends Student:
+
+  private var c: List[Course] = Nil();
+
+  override def enrolling(course: Course): Unit = c = List.append(Cons(course, Nil()), c)
+  override def courses: List[String] = map(c)((e: Course) => e.name)
+  override def hasTeacher(teacher: String): Boolean = ???
+
 object Student:
   def apply(name: String, year: Int = 2017): Student = ???
 
