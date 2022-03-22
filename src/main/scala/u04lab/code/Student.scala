@@ -14,21 +14,18 @@ trait Course:
   def name: String
   def teacher: String
 
-case class CourseImpl(override val name: String, override val teacher: String) extends Course
-
-class StudentImpl(override val name: String, override val year: Int) extends Student:
-
-  private var c: List[Course] = Nil();
-
-  override def enrolling(course: Course*): Unit = course.foreach(e => c = append(Cons(e, Nil()), c))
-  override def courses: List[String] = map(c)((e: Course) => e.name)
-  override def hasTeacher(teacher: String): Boolean = contains(map(c)((e: Course) => e.teacher), teacher)
-
 object Student:
   def apply(name: String, year: Int = 2017): Student = StudentImpl(name, year)
 
+  private case class StudentImpl(override val name: String, override val year: Int) extends Student:
+    private var c: List[Course] = Nil();
+    override def enrolling(course: Course*): Unit = course.foreach(e => c = append(Cons(e, Nil()), c))
+    override def courses: List[String] = map(c)((e: Course) => e.name)
+    override def hasTeacher(teacher: String): Boolean = contains(map(c)((e: Course) => e.teacher), teacher)
+
 object Course:
   def apply(name: String, teacher: String): Course = CourseImpl(name, teacher)
+  private case class CourseImpl(override val name: String, override val teacher: String) extends Course
 
 object SameTeacher:
   def unapply(courses: List[Course]): scala.Option[String] = courses match
