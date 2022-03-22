@@ -8,3 +8,4 @@ object OptionToOptional {
     case _ => Optional.empty()
   }
 }
+

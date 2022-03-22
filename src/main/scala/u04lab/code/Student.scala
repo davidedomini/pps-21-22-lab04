@@ -1,6 +1,7 @@
 package u04lab.code
 
 import List.*
+import scala.Option.*
 
 trait Student:
   def name: String
@@ -29,6 +30,11 @@ object Student:
 object Course:
   def apply(name: String, teacher: String): Course = CourseImpl(name, teacher)
 
+object SameTeacher:
+  def unapply(courses: List[Course]): scala.Option[String] = courses match
+    case Cons(h, t) if length(filter(map(courses)((e:Course) => e.teacher))((s: String) => s == h.teacher)) == length(courses) => scala.Option(h.teacher)
+    case _ => empty
+
 @main def checkStudents(): Unit =
   val cPPS = Course("PPS", "Viroli")
   val cPCD = Course("PCD", "Ricci")
@@ -46,6 +52,15 @@ object Course:
     (s1.courses, s2.courses, s3.courses)
   ) // (Cons(PCD,Cons(PPS,Nil())),Cons(PPS,Nil()),Cons(SDR,Cons(PCD,Cons(PPS,Nil()))))
   println(s1.hasTeacher("Ricci")) // true
+
+  def testSameTeacher(c: List[Course]): String = c match
+    case SameTeacher(s) => "Same Teacher:" + s
+    case _ => "No same teacher"
+
+  val cPER = Course("Pervasive", "Viroli")
+
+  println(testSameTeacher(Cons(cPPS, Cons(cPCD, Cons(cSDR, Nil())))))
+  println(testSameTeacher(Cons(cPPS, Cons(cPER, Nil()))))
 
 /** Hints:
   *   - simply implement Course, e.g. with a case class
