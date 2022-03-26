@@ -14,7 +14,7 @@ object PairSet:
     import u04lab.code.List
     private var elements: List[(Int, Int)] = List.Nil()
     private def checkNotAlreadyPresent(e: (Int, Int)): Boolean = !List.contains(elements, e)
-    override def addElement(e: (Int, Int)): Unit = elements = if checkNotAlreadyPresent(e) then List.append(elements, List.Cons(e, List.Nil())) else elements
+    override def addElement(e: (Int, Int)): Unit = elements = if checkNotAlreadyPresent(e) then List.Cons(e, elements) else elements
     override def size(): Int = List.length(elements)
 
 /** solution and descriptions at https://bitbucket.org/mviroli/oop2019-esami/src/master/a01a/sol2/ */
