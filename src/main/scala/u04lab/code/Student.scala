@@ -20,16 +20,19 @@ object Student:
   private case class StudentImpl(override val name: String, override val year: Int) extends Student:
     private var c: List[Course] = Nil();
     override def enrolling(course: Course*): Unit = course.foreach(e => c = append(Cons(e, Nil()), c))
-    override def courses: List[String] = map(c)((e: Course) => e.name)
-    override def hasTeacher(teacher: String): Boolean = contains(map(c)((e: Course) => e.teacher), teacher)
+    override def courses: List[String] = map(c)(_.name)
+    override def hasTeacher(teacher: String): Boolean = contains(map(c)(_.teacher), teacher)
 
 object Course:
   def apply(name: String, teacher: String): Course = CourseImpl(name, teacher)
   private case class CourseImpl(override val name: String, override val teacher: String) extends Course
 
 object SameTeacher:
+  private def extractTeachers(c: List[Course]): List[String] = map(c)(_.teacher)
+  private def checkAllEquals(c: List[Course], firstTeacher: String): Boolean = length(filter(extractTeachers(c))(_ == firstTeacher)) == length(c)
+
   def unapply(courses: List[Course]): scala.Option[String] = courses match
-    case Cons(h, t) if length(filter(map(courses)((e:Course) => e.teacher))((s: String) => s == h.teacher)) == length(courses) => scala.Option(h.teacher)
+    case Cons(h, t) if checkAllEquals(courses, h.teacher) => scala.Option(h.teacher)
     case _ => empty
 
 @main def checkStudents(): Unit =
